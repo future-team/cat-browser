@@ -43,12 +43,14 @@ export default class Browser {
         let Cookies = this.cookie,
             CName = this.cookieName,
             CValue = this.cookieValue;
-        if (Cookies.get(CName) == CValue) {
+        /*if (Cookies.get(CName) == CValue) {
             return false;
         } else {
             Cookies.set(CName, CValue,{expires:this.opts.ValidTime});
             return true
-        }
+        }*/
+        //fot test;
+        return true;
     }
     /**
      * 其他必要信息
@@ -61,7 +63,7 @@ export default class Browser {
             n: this.opts.moduleName,
             l: 'INFO',
             a: browserName,
-            data: ''
+            data: browserName
         };
         return data;
     }

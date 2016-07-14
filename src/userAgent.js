@@ -4,18 +4,18 @@ export default class UserAgent {
     }
 
     getInfo() {
-        let browserName = this.getBrowserVersion();
-        return browserName;
+        let browserInfo = this.getBrowserVersion();
+        return browserInfo;
     }
 
     /**
-     * 获得版本号
+     * 获得版本号 不需要
      * */
     getBrowserVersion() {
-        let browser = this.getBrowserInfo();
-        let versionInfo = parseInt((browser + "").replace(/[^0-9.]/ig, ""));
-        console.log(browser + versionInfo);
-        return browser + versionInfo;
+        let browser = this.getBrowserInfo()+'';
+        //let versionInfo = parseInt((browser + "").replace(/[^0-9.]/ig, ""));
+        console.log(browser);
+        return browser;
     }
 
     /**
@@ -24,9 +24,9 @@ export default class UserAgent {
     getBrowserInfo() {
         var agent = navigator.userAgent.toLowerCase();
         var regStr_ie = /msie [\d.]+;/gi;
-        var regStr_ff = /firefox\/[\d.]+/gi
-        var regStr_chrome = /chrome\/[\d.]+/gi;
-        var regStr_saf = /safari\/[\d.]+/gi;
+        var regStr_ff = /\S+\sfirefox\/[\d.]+/gi;
+        var regStr_chrome = /chrome\/[\d.]+\s\S+/gi;
+        var regStr_saf = /\S+\ssafari\/[\d.]+/gi;
         //IE
         if (agent.indexOf("msie") > 0) {
             return agent.match(regStr_ie);
