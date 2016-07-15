@@ -6,7 +6,7 @@ export default class Cookie{
         Cookies.set(name,value,opts);
     }
     get(name){
-        Cookies.get(name);
+        return Cookies.get(name);
     }
     remove(name){
         Cookies.remove(name);

@@ -10,27 +10,21 @@ import defaultOpts from './Options';
  * */
 export default class Browser {
     constructor(opts = {}) {
-        this.opts = Object.assign(defaultOpts,opts);
+        //兼容低版本浏览器，不用Object.assign，
+        //this.opts = Object.assign(defaultOpts,opts);
+        this.moduleName = opts.moduleName || defaultOpts.moduleName;
+        this.expiresTime = opts.expiresTime || defaultOpts.expiresTime;
         //cookie判断标示,值为yes
         this.cookieName = 'catBrowserName';
         this.cookieValue = 'catBrowserValue';
         //统计信息url
-        this.url = opts.url || '//221.181.67.144/web-broker-service/api/js';
+        this.url ='//221.181.67.144/web-broker-service/api/js';
         this.cookie = new Cookie();
         this.userAgent = new UserAgent();
-        this.loadEvent();
+        this.initHanlder();
     }
     /**
-     * 加载时执行
-     * */
-    loadEvent() {
-        let _this = this;
-        window.onload = function () {
-            _this.initHanlder();
-        }
-    }
-    /**
-     *
+     * 初始化方法
      * */
     initHanlder() {
         let isFirst = this.isFirstVisit();
@@ -43,24 +37,23 @@ export default class Browser {
         let Cookies = this.cookie,
             CName = this.cookieName,
             CValue = this.cookieValue;
-        /*if (Cookies.get(CName) == CValue) {
+        if (Cookies.get(CName) == CValue) {
             return false;
         } else {
-            Cookies.set(CName, CValue,{expires:this.opts.ValidTime});
+            Cookies.set(CName, CValue,{expires:this.expiresTime});
             return true
-        }*/
-        //fot test;
-        return true;
+        }
     }
     /**
      * 其他必要信息
      * */
     getData(browserName) {
+        //对应catjs报警接口字段http://cat.dp/cat/r/home?op=view&docName=browserMonitor
         let data = {
             v: 1,
             t: +new Date(),
-            msg: 'nothing',
-            n: this.opts.moduleName,
+            msg: 'browserUseRate',
+            n: this.moduleName,
             l: 'INFO',
             a: browserName,
             data: browserName
@@ -79,9 +72,9 @@ export default class Browser {
      * 发送信息
      * */
     sendMsg(data){
-        //let [url,image] = [this.url, new Image(1, 1)];
+        let [url,image] = [this.url, new Image(1, 1)];
         console.dir(data);
-        //image.src = url+"?"+this.format(data );
+        image.src = url+"?"+ data;
     }
     /**
      * 格式化数据

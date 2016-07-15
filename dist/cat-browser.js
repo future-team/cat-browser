@@ -115,30 +115,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, Browser);
 
-	        this.opts = Object.assign(_Options2['default'], opts);
+	        //兼容低版本浏览器，不用Object.assign，
+	        //this.opts = Object.assign(defaultOpts,opts);
+	        this.moduleName = opts.moduleName || _Options2['default'].moduleName;
+	        this.expiresTime = opts.expiresTime || _Options2['default'].expiresTime;
 	        //cookie判断标示,值为yes
 	        this.cookieName = 'catBrowserName';
 	        this.cookieValue = 'catBrowserValue';
 	        //统计信息url
-	        this.url = opts.url || '//221.181.67.144/web-broker-service/api/js';
+	        this.url = '//221.181.67.144/web-broker-service/api/js';
 	        this.cookie = new _Cookie2['default']();
 	        this.userAgent = new _UserAgent2['default']();
-	        this.loadEvent();
+	        this.initHanlder();
 	    }
 
 	    /**
-	     * 加载时执行
-	     * */
-
-	    Browser.prototype.loadEvent = function loadEvent() {
-	        var _this = this;
-	        window.onload = function () {
-	            _this.initHanlder();
-	        };
-	    };
-
-	    /**
-	     *
+	     * 初始化方法
 	     * */
 
 	    Browser.prototype.initHanlder = function initHanlder() {
@@ -157,7 +149,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (Cookies.get(CName) == CValue) {
 	            return false;
 	        } else {
-	            Cookies.set(CName, CValue, { expires: this.opts.ValidTime });
+	            Cookies.set(CName, CValue, { expires: this.expiresTime });
 	            return true;
 	        }
 	    };
@@ -167,14 +159,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * */
 
 	    Browser.prototype.getData = function getData(browserName) {
+	        //对应catjs报警接口字段http://cat.dp/cat/r/home?op=view&docName=browserMonitor
 	        var data = {
 	            v: 1,
 	            t: +new Date(),
-	            msg: 'nothing',
-	            n: this.opts.moduleName,
+	            msg: 'browserUseRate',
+	            n: this.moduleName,
 	            l: 'INFO',
 	            a: browserName,
-	            data: ''
+	            data: browserName
 	        };
 	        return data;
 	    };
@@ -194,9 +187,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * */
 
 	    Browser.prototype.sendMsg = function sendMsg(data) {
-	        //let [url,image] = [this.url, new Image(1, 1)];
+	        var url = this.url;
+	        var image = new Image(1, 1);
+
 	        console.dir(data);
-	        //image.src = url+"?"+this.format(data );
+	        image.src = url + "?" + data;
 	    };
 
 	    /**
@@ -246,7 +241,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Cookie.prototype.get = function get(name) {
-	        _jsCookie2['default'].get(name);
+	        return _jsCookie2['default'].get(name);
 	    };
 
 	    Cookie.prototype.remove = function remove(name) {
@@ -432,19 +427,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    UserAgent.prototype.getInfo = function getInfo() {
-	        var browserName = this.getBrowserVersion();
-	        return browserName;
+	        var browserInfo = this.getBrowserVersion();
+	        return browserInfo;
 	    };
 
 	    /**
-	     * 获得版本号
+	     * 获得版本号 不需要
 	     * */
 
 	    UserAgent.prototype.getBrowserVersion = function getBrowserVersion() {
-	        var browser = this.getBrowserInfo();
-	        var versionInfo = parseInt((browser + "").replace(/[^0-9.]/ig, ""));
-	        console.log(browser + versionInfo);
-	        return browser + versionInfo;
+	        var browser = this.getBrowserInfo() + '';
+	        //let versionInfo = parseInt((browser + "").replace(/[^0-9.]/ig, ""));
+	        console.log(browser);
+	        return browser;
 	    };
 
 	    /**
@@ -452,27 +447,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * */
 
 	    UserAgent.prototype.getBrowserInfo = function getBrowserInfo() {
-	        var agent = navigator.userAgent.toLowerCase();
-	        var regStr_ie = /msie [\d.]+;/gi;
-	        var regStr_ff = /firefox\/[\d.]+/gi;
-	        var regStr_chrome = /chrome\/[\d.]+/gi;
-	        var regStr_saf = /safari\/[\d.]+/gi;
+	        var agent = navigator.userAgent.toLowerCase(),
+	            regStr_ie = /msie [\d.]+;/gi,
+	            regStr_ff = /\S+\sfirefox\/[\d.]+/gi,
+	            regStr_chrome = /chrome\/[\d.]+\s\S+/gi,
+	            regStr_saf = /\S+\ssafari\/[\d.]+/gi;
+	        var regStr_other = /\S+\s\S+$/gi;
 	        //IE
 	        if (agent.indexOf("msie") > 0) {
 	            return agent.match(regStr_ie);
+	        } else {
+	            return agent.match(regStr_other);
 	        }
-	        //firefox
-	        if (agent.indexOf("firefox") > 0) {
-	            return agent.match(regStr_ff);
-	        }
-	        //Chrome
-	        if (agent.indexOf("chrome") > 0) {
-	            return agent.match(regStr_chrome);
-	        }
-	        //Safari
-	        if (agent.indexOf("safari") > 0 && agent.indexOf("chrome") < 0) {
-	            return agent.match(regStr_saf);
-	        }
+	        /* //firefox
+	         if (agent.indexOf("firefox") > 0) {
+	             return agent.match(regStr_ff);
+	         }
+	         //Chrome
+	         if (agent.indexOf("chrome") > 0) {
+	             return agent.match(regStr_chrome);
+	         }
+	         //Safari
+	         if (agent.indexOf("safari") > 0 && agent.indexOf("chrome") < 0) {
+	             return agent.match(regStr_saf);
+	         }*/
 	    };
 
 	    return UserAgent;
@@ -489,8 +487,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.__esModule = true;
 	var options = {
-	    moduleName: 'merchant',
-	    ValidTime: 7
+	  /**
+	   * 项目名称
+	   * */
+	  moduleName: 'cat-browser',
+	  /**
+	   * cookie过期时间
+	   * */
+	  expiresTime: 1,
+	  Dpid: ''
 	};
 	exports['default'] = options;
 	module.exports = exports['default'];

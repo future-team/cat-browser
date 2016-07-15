@@ -2,10 +2,11 @@ let options = {
     /**
      * 项目名称
      * */
-    moduleName:'merchant',
+    moduleName:'cat-browser',
     /**
      * cookie过期时间
      * */
-    ValidTime:7
+    expiresTime:1,
+    Dpid:''
 };
 export default options;

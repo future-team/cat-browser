@@ -22,16 +22,19 @@ export default class UserAgent {
      * 获取浏览器类型
      * */
     getBrowserInfo() {
-        var agent = navigator.userAgent.toLowerCase();
-        var regStr_ie = /msie [\d.]+;/gi;
-        var regStr_ff = /\S+\sfirefox\/[\d.]+/gi;
-        var regStr_chrome = /chrome\/[\d.]+\s\S+/gi;
-        var regStr_saf = /\S+\ssafari\/[\d.]+/gi;
+        var agent = navigator.userAgent.toLowerCase(),
+         regStr_ie = /msie [\d.]+;/gi,
+         regStr_ff = /\S+\sfirefox\/[\d.]+/gi,
+         regStr_chrome = /chrome\/[\d.]+\s\S+/gi,
+         regStr_saf = /\S+\ssafari\/[\d.]+/gi;
+        let regStr_other = /\S+\s\S+$/gi;
         //IE
         if (agent.indexOf("msie") > 0) {
             return agent.match(regStr_ie);
+        }else{
+            return agent.match(regStr_other);
         }
-        //firefox
+       /* //firefox
         if (agent.indexOf("firefox") > 0) {
             return agent.match(regStr_ff);
         }
@@ -42,7 +45,8 @@ export default class UserAgent {
         //Safari
         if (agent.indexOf("safari") > 0 && agent.indexOf("chrome") < 0) {
             return agent.match(regStr_saf);
-        }
+        }*/
+
 
     }
 }
