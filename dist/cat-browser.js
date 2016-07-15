@@ -115,7 +115,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, Browser);
 
-	        //兼容低版本浏览器，不用Object.assign，
+	        //兼容低版本浏览器，不用Object.assign
 	        //this.opts = Object.assign(defaultOpts,opts);
 	        this.moduleName = opts.moduleName || _Options2['default'].moduleName;
 	        this.expiresTime = opts.expiresTime || _Options2['default'].expiresTime;
@@ -159,7 +159,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * */
 
 	    Browser.prototype.getData = function getData(browserName) {
-	        //对应catjs报警接口字段http://cat.dp/cat/r/home?op=view&docName=browserMonitor
+	        /**
+	         * 对应catjs报警接口
+	         * 字段文档http://cat.dp/cat/r/home?op=view&docName=browserMonitor
+	         */
 	        var data = {
 	            v: 1,
 	            t: +new Date(),
@@ -190,7 +193,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var url = this.url;
 	        var image = new Image(1, 1);
 
-	        console.dir(data);
+	        //console.dir(data);
 	        image.src = url + "?" + data;
 	    };
 
@@ -432,13 +435,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    /**
-	     * 获得版本号 不需要
+	     * 原本要获得版本号 目前不需要
 	     * */
 
 	    UserAgent.prototype.getBrowserVersion = function getBrowserVersion() {
 	        var browser = this.getBrowserInfo() + '';
 	        //let versionInfo = parseInt((browser + "").replace(/[^0-9.]/ig, ""));
-	        console.log(browser);
 	        return browser;
 	    };
 
@@ -448,8 +450,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    UserAgent.prototype.getBrowserInfo = function getBrowserInfo() {
 	        var agent = navigator.userAgent.toLowerCase(),
-	            regStr_ie = /msie [\d.]+;/gi,
-	            regStr_ff = /\S+\sfirefox\/[\d.]+/gi,
+	            regStr_ie = /msie [\d.]+;/gi;
+	        /**
+	         * 具体匹配不同浏览器
+	         * */
+	        var regStr_ff = /\S+\sfirefox\/[\d.]+/gi,
 	            regStr_chrome = /chrome\/[\d.]+\s\S+/gi,
 	            regStr_saf = /\S+\ssafari\/[\d.]+/gi;
 	        var regStr_other = /\S+\s\S+$/gi;
@@ -461,15 +466,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        /* //firefox
 	         if (agent.indexOf("firefox") > 0) {
-	             return agent.match(regStr_ff);
+	         return agent.match(regStr_ff);
 	         }
 	         //Chrome
 	         if (agent.indexOf("chrome") > 0) {
-	             return agent.match(regStr_chrome);
+	         return agent.match(regStr_chrome);
 	         }
 	         //Safari
 	         if (agent.indexOf("safari") > 0 && agent.indexOf("chrome") < 0) {
-	             return agent.match(regStr_saf);
+	         return agent.match(regStr_saf);
 	         }*/
 	    };
 
