@@ -6,7 +6,6 @@ let options = {
     /**
      * cookie过期时间
      * */
-    expiresTime:1,
-    Dpid:''
+    expiresTime:1
 };
 export default options;

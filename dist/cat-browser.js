@@ -452,7 +452,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var agent = navigator.userAgent.toLowerCase(),
 	            regStr_ie = /msie [\d.]+;/gi;
 	        /**
-	         * 具体匹配不同浏览器
+	         * 具体匹配不同浏览器目前不做太详细区分
 	         * */
 	        var regStr_ff = /\S+\sfirefox\/[\d.]+/gi,
 	            regStr_chrome = /chrome\/[\d.]+\s\S+/gi,
@@ -499,8 +499,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * cookie过期时间
 	   * */
-	  expiresTime: 1,
-	  Dpid: ''
+	  expiresTime: 1
 	};
 	exports['default'] = options;
 	module.exports = exports['default'];
