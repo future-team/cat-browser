@@ -11,17 +11,16 @@ import defaultOpts from './Options';
 export default class Browser {
     constructor(opts = {}) {
         //兼容低版本浏览器，不用Object.assign
-        //this.opts = Object.assign(defaultOpts,opts);
-        this.moduleName = opts.moduleName || defaultOpts.moduleName;
-        this.expiresTime = opts.expiresTime || defaultOpts.expiresTime;
-        //cookie判断标示,值为yes
-        this.cookieName = 'catBrowserName';
-        this.cookieValue = 'catBrowserValue';
-        //统计信息url
-        this.url = '//221.181.67.144/web-broker-service/api/js';
+        this.opts = this.extendObj(defaultOpts, opts);
+        debugger
+        this.isOnlyDp = this.opts.isOnlyDp;
         this.cookie = new Cookie();
         this.userAgent = new UserAgent();
-        this.initHanlder();
+        //是否监控
+        this.isCat = true;
+        //是否必须dp环境下，再次判断是否监控
+        this.isOnlyDp && this.isDpEnv();
+        this.isCat && this.initHanlder();
     }
 
     /**
@@ -37,12 +36,12 @@ export default class Browser {
      * */
     isFirstVisit() {
         let Cookies = this.cookie,
-            CName = this.cookieName,
-            CValue = this.cookieValue;
+            CName = this.opts.cookieName,
+            CValue = this.opts.cookieValue;
         if (Cookies.get(CName) == CValue) {
             return false;
         } else {
-            Cookies.set(CName, CValue, {expires: this.expiresTime});
+            Cookies.set(CName, CValue, {expires: this.opts.expiresTime});
             return true
         }
     }
@@ -59,11 +58,12 @@ export default class Browser {
             v: 1,
             t: +new Date(),
             msg: 'browserUseRate',
-            n: this.moduleName,
+            n: this.opts.moduleName,
             l: 'INFO',
             a: browserName,
-            data: browserName
+            data: this.getHost()
         };
+        debugger
         return data;
     }
 
@@ -80,7 +80,7 @@ export default class Browser {
      * 发送信息
      * */
     sendMsg(data) {
-        let [url,image] = [this.url, new Image(1, 1)];
+        let [url,image] = [this.opts.url, new Image(1, 1)];
         //console.dir(data);
         image.src = url + "?" + data;
     }
@@ -97,4 +97,40 @@ export default class Browser {
         }
         return arr.join('&');
     }
+
+    /**
+     * 原生实现extend
+     * */
+    extendObj(target, source) {
+        for (var p in source) {
+            if (source.hasOwnProperty(p)) {
+                target[p] = source[p];
+            }
+        }
+        return target;
+    }
+    /**
+     * 获取当前环境hostname
+     * */
+    getHost(){
+        let url = location.hostname || '';
+        return url;
+    }
+    /**
+     * 获取当前环境。
+     * 商家后台或者阿波罗不同环境
+     * */
+    isDpEnv() {
+        let dpEnv = this.dpEnv(),
+            url = location.hostname;
+        this.isCat = url.indexOf(dpEnv)>-1 ? true : false;
+    }
+    /**
+     * 当前商家和阿波罗对应的hostname
+     * */
+    dpEnv() {
+        let url = ['e.51ping.com', 'ppe.e.dianping.com', 'e.dianping.com', 'apollo.51ping.com', 'ppea.dper.com', 'a.dper.com'];
+        return url.join('');
+    }
+
 };

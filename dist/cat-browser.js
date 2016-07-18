@@ -116,17 +116,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, Browser);
 
 	        //兼容低版本浏览器，不用Object.assign
-	        //this.opts = Object.assign(defaultOpts,opts);
-	        this.moduleName = opts.moduleName || _Options2['default'].moduleName;
-	        this.expiresTime = opts.expiresTime || _Options2['default'].expiresTime;
-	        //cookie判断标示,值为yes
-	        this.cookieName = 'catBrowserName';
-	        this.cookieValue = 'catBrowserValue';
-	        //统计信息url
-	        this.url = '//221.181.67.144/web-broker-service/api/js';
+	        this.opts = this.extendObj(_Options2['default'], opts);
+	        debugger;
+	        this.isOnlyDp = this.opts.isOnlyDp;
 	        this.cookie = new _Cookie2['default']();
 	        this.userAgent = new _UserAgent2['default']();
-	        this.initHanlder();
+	        //是否监控
+	        this.isCat = true;
+	        //是否必须dp环境下，再次判断是否监控
+	        this.isOnlyDp && this.isDpEnv();
+	        this.isCat && this.initHanlder();
 	    }
 
 	    /**
@@ -144,12 +143,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Browser.prototype.isFirstVisit = function isFirstVisit() {
 	        var Cookies = this.cookie,
-	            CName = this.cookieName,
-	            CValue = this.cookieValue;
+	            CName = this.opts.cookieName,
+	            CValue = this.opts.cookieValue;
 	        if (Cookies.get(CName) == CValue) {
 	            return false;
 	        } else {
-	            Cookies.set(CName, CValue, { expires: this.expiresTime });
+	            Cookies.set(CName, CValue, { expires: this.opts.expiresTime });
 	            return true;
 	        }
 	    };
@@ -167,11 +166,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            v: 1,
 	            t: +new Date(),
 	            msg: 'browserUseRate',
-	            n: this.moduleName,
+	            n: this.opts.moduleName,
 	            l: 'INFO',
 	            a: browserName,
-	            data: browserName
+	            data: this.getHost()
 	        };
+	        debugger;
 	        return data;
 	    };
 
@@ -190,7 +190,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * */
 
 	    Browser.prototype.sendMsg = function sendMsg(data) {
-	        var url = this.url;
+	        var url = this.opts.url;
 	        var image = new Image(1, 1);
 
 	        //console.dir(data);
@@ -209,6 +209,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	        return arr.join('&');
+	    };
+
+	    /**
+	     * 原生实现extend
+	     * */
+
+	    Browser.prototype.extendObj = function extendObj(target, source) {
+	        for (var p in source) {
+	            if (source.hasOwnProperty(p)) {
+	                target[p] = source[p];
+	            }
+	        }
+	        return target;
+	    };
+
+	    /**
+	     * 获取当前环境hostname
+	     * */
+
+	    Browser.prototype.getHost = function getHost() {
+	        var url = location.hostname || '';
+	        return url;
+	    };
+
+	    /**
+	     * 获取当前环境。
+	     * 商家后台或者阿波罗不同环境
+	     * */
+
+	    Browser.prototype.isDpEnv = function isDpEnv() {
+	        var dpEnv = this.dpEnv(),
+	            url = location.hostname;
+	        this.isCat = url.indexOf(dpEnv) > -1 ? true : false;
+	    };
+
+	    /**
+	     * 当前商家和阿波罗对应的hostname
+	     * */
+
+	    Browser.prototype.dpEnv = function dpEnv() {
+	        var url = ['e.51ping.com', 'ppe.e.dianping.com', 'e.dianping.com', 'apollo.51ping.com', 'ppea.dper.com', 'a.dper.com'];
+	        return url.join('');
 	    };
 
 	    return Browser;
@@ -499,7 +541,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * cookie过期时间
 	   * */
-	  expiresTime: 1
+	  expiresTime: 1,
+	  /**
+	   * 点评id
+	   * */
+	  dpId: '',
+	  /**
+	   * 后端对应的url，默认dp，catjs报警接口
+	   * 不建议更改，因为字段需保持一致
+	   * */
+	  url: '//221.181.67.144/web-broker-service/api/js',
+	  /**
+	   * 可设置cookie名称和value，以判断是否符合规则的登录
+	   * 建议设置不易重复的值或者使用默认值
+	   * */
+	  cookieName: 'catBrowserName',
+	  cookieValue: 'catBrowserValue',
+	  /**
+	   * 是否只在dp环境下,才启用统计功能
+	   * 默认不加判断都可统计
+	   * */
+	  isOnlyDp: false
 	};
 	exports['default'] = options;
 	module.exports = exports['default'];
