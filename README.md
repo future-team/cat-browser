@@ -1,16 +1,37 @@
 # cat-browser
 
-基于cat的浏览器使用情况监控系统
+基于cat的浏览器使用情况统计工具
 
 ## 使用
+	
+-	基于cat实现的浏览器使用情况统计工具，可以在cat上输入对应的模块名查看浏览器的使用率	      
+	基于cookie来判断是否有效时间内第一次登录，默认一天过期。可手动设置cookie过期时间    
+	[点击转到cat查看统计情况](http://cat.dp/cat/r/browser?op=jsError)转到统计图表查看    
+	  
+- 	实例如下：   
 
--
-- git remote rm origin
-- git remote add origin {你的仓库地址}  例如：git remote add origin git@code.dianpingoa.com:pc-trade-f2e/apollo-template-static.git
-- git fetch
-- git pull origin master
+	```
+		import { CatBrowser } from '../../src/index.js';
+        
+        (()=>{
+            let a = new CatBrowser({
+                moduleName:'test2'
+            });
+        })();
+	
+	```
+-	参数说明：
+	```
+		 /**
+          * 项目名称，即在cat上输入的模块名
+          * */
+          moduleName:'cat-browser',
+          /**
+          	* cookie过期时间，以天为单位
+            * */
+          expiresTime:1
+	```
 
-- 全局安装smartDoc 用于生成文档
 
 ## Command
 

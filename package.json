@@ -64,8 +64,8 @@
     "start": "npm run demo"
   },
   "bugs": {
-    "url": "http:///issues"
+    "url": "https://github.com/future-team/cat-browser/issues"
   },
-  "homepage": "http://",
+  "homepage": "https://github.com/future-team/cat-browser",
   "license": "MIT"
 }
