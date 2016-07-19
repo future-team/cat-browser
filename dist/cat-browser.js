@@ -117,7 +117,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        //兼容低版本浏览器，不用Object.assign
 	        this.opts = this.extendObj(_Options2['default'], opts);
-	        debugger;
 	        this.isOnlyDp = this.opts.isOnlyDp;
 	        this.cookie = new _Cookie2['default']();
 	        this.userAgent = new _UserAgent2['default']();
@@ -171,7 +170,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            a: browserName,
 	            data: this.getHost()
 	        };
-	        debugger;
 	        return data;
 	    };
 

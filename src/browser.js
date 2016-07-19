@@ -12,7 +12,6 @@ export default class Browser {
     constructor(opts = {}) {
         //兼容低版本浏览器，不用Object.assign
         this.opts = this.extendObj(defaultOpts, opts);
-        debugger
         this.isOnlyDp = this.opts.isOnlyDp;
         this.cookie = new Cookie();
         this.userAgent = new UserAgent();
@@ -63,7 +62,6 @@ export default class Browser {
             a: browserName,
             data: this.getHost()
         };
-        debugger
         return data;
     }
 
