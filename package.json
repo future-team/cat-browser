@@ -1,6 +1,6 @@
 {
   "name": "cat-browser",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "cat浏览器使用情况统计",
   "main": "lib/",
   "repository": {

@@ -223,11 +223,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    /**
-	     * 获取当前环境hostname
+	     * 获取当前环境页面的url
 	     * */
 
 	    Browser.prototype.getHost = function getHost() {
-	        var url = location.hostname || '';
+	        var url = location.href || '';
 	        return url;
 	    };
 

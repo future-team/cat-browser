@@ -108,10 +108,10 @@ export default class Browser {
         return target;
     }
     /**
-     * 获取当前环境hostname
+     * 获取当前环境页面的url
      * */
     getHost(){
-        let url = location.hostname || '';
+        let url = location.href || '';
         return url;
     }
     /**
