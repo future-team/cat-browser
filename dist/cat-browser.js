@@ -302,18 +302,23 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	 * JavaScript Cookie v2.1.2
+	 * JavaScript Cookie v2.1.3
 	 * https://github.com/js-cookie/js-cookie
 	 *
 	 * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
 	 * Released under the MIT license
 	 */
 	;(function (factory) {
+		var registeredInModuleLoader = false;
 		if (true) {
 			!(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else if (typeof exports === 'object') {
+			registeredInModuleLoader = true;
+		}
+		if (true) {
 			module.exports = factory();
-		} else {
+			registeredInModuleLoader = true;
+		}
+		if (!registeredInModuleLoader) {
 			var OldCookies = window.Cookies;
 			var api = window.Cookies = factory();
 			api.noConflict = function () {
@@ -374,9 +379,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 					return (document.cookie = [
 						key, '=', value,
-						attributes.expires && '; expires=' + attributes.expires.toUTCString(), // use expires attribute, max-age is not supported by IE
-						attributes.path    && '; path=' + attributes.path,
-						attributes.domain  && '; domain=' + attributes.domain,
+						attributes.expires ? '; expires=' + attributes.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+						attributes.path ? '; path=' + attributes.path : '',
+						attributes.domain ? '; domain=' + attributes.domain : '',
 						attributes.secure ? '; secure' : ''
 					].join(''));
 				}
@@ -430,7 +435,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			api.set = api;
 			api.get = function (key) {
-				return api(key);
+				return api.call(api, key);
 			};
 			api.getJSON = function () {
 				return api.apply({
@@ -548,7 +553,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * 后端对应的url，默认dp，catjs报警接口
 	   * 不建议更改，因为字段需保持一致
 	   * */
-	  url: '//221.181.67.144/web-broker-service/api/js',
+	  url: '//catdot.dianping.com/web-broker-service/api/js',
 	  /**
 	   * 可设置cookie名称和value，以判断是否符合规则的登录
 	   * 建议设置不易重复的值或者使用默认值
